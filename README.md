@@ -14,12 +14,12 @@ A cada dia, avaliamos as notas e fazemos variações dos ingredientes, em busca 
 
 - Linux:
 ```shell
-$ sudo docker compose up -d --build
+sudo docker compose up -d --build
 ```
 
 - Windows:
 ```shell
-$ docker-compose up -d --build
+docker-compose up -d --build
 ```
 
 4. Acesse a pasta ```./frontend```;
@@ -28,10 +28,10 @@ $ docker-compose up -d --build
 
 - Linux:
 ```shell
-$ sudo docker compose up -d --build
+sudo docker compose up -d --build
 ```
 
 - Windows:
 ```shell
-$ docker-compose up -d --build
+docker-compose up -d --build
 ```
