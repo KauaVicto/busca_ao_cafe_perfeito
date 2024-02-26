@@ -21,3 +21,5 @@ FROM httpd:2.4
 
 # Copie os arquivos construídos da etapa anterior
 COPY --from=builder /app/dist/ /usr/local/apache2/htdocs/
+
+RUN sed -i '/<Directory "\/usr\/local\/apache2\/htdocs">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /usr/local/apache2/conf/httpd.conf

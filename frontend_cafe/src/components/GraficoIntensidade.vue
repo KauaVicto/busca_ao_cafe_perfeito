@@ -52,7 +52,8 @@ export default defineComponent({
         scales: {
           y: {
             beginAtZero: true,
-            max: 5
+            max: 5,
+            min: 1
           }
         }
       }
