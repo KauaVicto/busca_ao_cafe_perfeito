@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="container">
+    <h1 class="display-6 text-center">Avalie o Café</h1>
     <form @submit.prevent="submitForm">
 
       <label for="intensidade" class="form-label">Intensidade <span class="badge bg-primary">{{ labelIntensidade }}</span></label>
@@ -19,6 +20,7 @@
         <textarea v-model="form.comentario" class="form-control" id="comentario"></textarea>
       </div>
       <button type="submit" class="btn btn-primary">Enviar</button>
+      <router-link :to="{name: 'cafe'}" class="btn btn-secondary mx-3">Voltar</router-link>
       <span id="obs" class="m-3">* Por favor, avalie apenas uma vez</span>
     </form>
   </div>

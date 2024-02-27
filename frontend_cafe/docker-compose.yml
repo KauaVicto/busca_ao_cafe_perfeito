@@ -1,11 +1,13 @@
 version: '3'
 
 services:
-  vuejs-app:
-    build: .
-    container_name: frontend_cafe
+  my-apache-container:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8082:80"
     restart: always
     volumes:
-      - ./dist:/usr/local/apache2/htdocs/
+      - ./dist:/usr/local/apache2/htdocs
+      - ./httpd.conf:/usr/local/apache2/conf/httpd.conf

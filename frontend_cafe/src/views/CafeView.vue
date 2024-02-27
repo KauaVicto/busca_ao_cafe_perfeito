@@ -2,8 +2,30 @@
   <div class="container">
     <h1 class="display-4 text-center">Busca ao café perfeito</h1>
     <div class="row justify-content-center">
+      <div class="col-lg-12 offset-lg-2">
+        <div class="table-responsive">
+          <DataTable :data="cafes" :columns="columns" :options="{ responsive: true, autoWidth: true, order: [[0, 'desc']] }"
+            class="table table-striped table-bordered display">
+            <thead>
+              <tr>
+                <th>Dia</th>
+                <th>Marca</th>
+                <th>Criador</th>
+                <th>Café(g)</th>
+                <th>Açúcar(g)</th>
+                <th>Nota Geral</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+          </DataTable>
+        </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastrarCafeModal">
+          Cadastrar café
+        </button>
+      </div>
+
       <div class="col-md-12">
-        <table class="table table-striped">
+        <!-- <table class="table table-striped">
           <thead>
             <tr>
               <th>Dia</th>
@@ -27,11 +49,9 @@
                   class="btn btn-primary btn-sm">Avaliar</router-link></td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastrarCafeModal">
-          Cadastrar café
-        </button>
+        
 
       </div>
     </div>
@@ -97,8 +117,13 @@ import GraficoIntensidade from '@/components/GraficoIntensidade.vue'; // @ is an
 import { api } from '@/config/axios'
 import { converterData } from '@/config/date'
 import Chart from 'chart.js/auto';
-import { getRelativePosition } from 'chart.js/helpers';
 import { ChartItem } from 'chart.js';
+import DataTable from 'datatables.net-vue3';
+import DataTableLib from 'datatables.net-bs5';
+import Buttons from 'datatables.net-buttons-bs5';
+import 'datatables.net-responsive-bs5';
+
+DataTable.use(DataTableLib)
 
 export interface Cafe {
   id: number;
@@ -112,6 +137,7 @@ export interface Cafe {
 
 interface returnData {
   cafes: Cafe[],
+  columns: any,
   form: any
 }
 
@@ -119,10 +145,26 @@ export default defineComponent({
   name: 'CafeView',
   components: {
     GraficoIntensidade,
+    DataTable
   },
   data(): returnData {
     return {
       cafes: [],
+      columns: [
+        { data: 'dia' },
+        { data: 'nome' },
+        { data: 'criador' },
+        { data: 'quantidade_cafe' },
+        { data: 'quantidade_acucar' },
+        { data: 'nota_geral' },
+        {
+          data: null, render: function (data: any, type: any, row: any, meta: any) {
+            return `<a href="/avaliar/${data.id}" class="btn btn-primary btn-sm">Avaliar</a>`
+          },
+          orderable: false
+        }
+
+      ],
       form: {
         dia: converterData(new Date().toUTCString()),
         nome: '',
@@ -198,5 +240,4 @@ export default defineComponent({
 <style>
 form {
   text-align: left;
-}
-</style>
+}</style>
