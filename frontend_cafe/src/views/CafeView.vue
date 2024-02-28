@@ -1,63 +1,28 @@
 <template>
   <div class="container">
     <h1 class="display-4 text-center">Busca ao café perfeito</h1>
-    <div class="row justify-content-center">
-      <div class="col-lg-12 offset-lg-2">
-        <div class="table-responsive">
-          <DataTable :data="cafes" :columns="columns" :options="{ responsive: true, autoWidth: true, order: [[0, 'desc']] }"
-            class="table table-striped table-bordered display">
-            <thead>
-              <tr>
-                <th>Dia</th>
-                <th>Marca</th>
-                <th>Criador</th>
-                <th>Café(g)</th>
-                <th>Açúcar(g)</th>
-                <th>Nota Geral</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-          </DataTable>
-        </div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastrarCafeModal">
-          Cadastrar café
-        </button>
-      </div>
 
-      <div class="col-md-12">
-        <!-- <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Dia</th>
-              <th>Marca</th>
-              <th>Criador</th>
-              <th>Café(g)</th>
-              <th>Açúcar(g)</th>
-              <th>Nota Geral</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in  cafes " :key="index">
-              <td>{{ item.dia }}</td>
-              <td>{{ item.nome }}</td>
-              <td>{{ item.criador }}</td>
-              <td>{{ item.quantidade_cafe }}</td>
-              <td>{{ item.quantidade_acucar }}</td>
-              <td>{{ item.nota_geral }}</td>
-              <td><router-link :to="{ name: 'avaliar', params: { id: item.id } }"
-                  class="btn btn-primary btn-sm">Avaliar</router-link></td>
-            </tr>
-          </tbody>
-        </table> -->
+    <DataTable :data="cafes" :columns="columns" :options="options" class="table table-striped table-bordered display">
+      <thead>
+        <tr>
+          <th>Dia</th>
+          <th>Marca</th>
+          <th>Criador</th>
+          <th>Café(g)</th>
+          <th>Açúcar(g)</th>
+          <th>Nota Geral</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+    </DataTable>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastrarCafeModal">
+      Cadastrar café
+    </button>
 
-        
+    <GraficoNotaGeral />
 
-      </div>
-    </div>
+    <GraficoIntensidade />
 
-    <canvas id="grafico_nota_geral" height="100"></canvas>
-    <GraficoIntensidade :cafes="cafes" />
 
 
     <!-- Modal -->
@@ -114,14 +79,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import GraficoIntensidade from '@/components/GraficoIntensidade.vue'; // @ is an alias to /src
+import GraficoNotaGeral from '@/components/GraficoNotaGeral.vue';
 import { api } from '@/config/axios'
 import { converterData } from '@/config/date'
-import Chart from 'chart.js/auto';
-import { ChartItem } from 'chart.js';
 import DataTable from 'datatables.net-vue3';
 import DataTableLib from 'datatables.net-bs5';
 import Buttons from 'datatables.net-buttons-bs5';
 import 'datatables.net-responsive-bs5';
+import moment from 'moment'
+import { options } from '@/config/datatable';
 
 DataTable.use(DataTableLib)
 
@@ -138,6 +104,7 @@ export interface Cafe {
 interface returnData {
   cafes: Cafe[],
   columns: any,
+  options: object,
   form: any
 }
 
@@ -145,13 +112,18 @@ export default defineComponent({
   name: 'CafeView',
   components: {
     GraficoIntensidade,
+    GraficoNotaGeral,
     DataTable
   },
   data(): returnData {
     return {
       cafes: [],
       columns: [
-        { data: 'dia' },
+        {
+          data: 'dia', render: function (data: any, type: any, row: any, meta: any) {
+            return moment(data).format('DD/MM/YYYY')
+          }
+        },
         { data: 'nome' },
         { data: 'criador' },
         { data: 'quantidade_cafe' },
@@ -165,6 +137,7 @@ export default defineComponent({
         }
 
       ],
+      options: options,
       form: {
         dia: converterData(new Date().toUTCString()),
         nome: '',
@@ -176,31 +149,6 @@ export default defineComponent({
   },
   async mounted() {
     await this.listCafes()
-
-    const ctx: ChartItem = document.getElementById('grafico_nota_geral') as ChartItem;
-
-    let cafesChart = this.cafes.slice(0, 15).sort((a, b) => a.id - b.id)
-
-    const grafico_nota_geral = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: cafesChart.map(cafe => cafe.criador),
-        datasets: [{
-          label: 'Nota Geral',
-          data: cafesChart.map(cafe => cafe.nota_geral),
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            max: 10
-          }
-        }
-      }
-    });
-
   },
   methods: {
     formCadastrarCafe() {
@@ -240,4 +188,5 @@ export default defineComponent({
 <style>
 form {
   text-align: left;
-}</style>
+}
+</style>

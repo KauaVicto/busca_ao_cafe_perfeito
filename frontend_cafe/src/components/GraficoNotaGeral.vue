@@ -1,5 +1,5 @@
 <template>
-  <canvas id="grafico_intensidade" height="100"></canvas>
+  <canvas id="grafico_nota_geral2" height="100"></canvas>
 </template>
 
 <script lang="ts">
@@ -12,8 +12,7 @@ import { PropType, defineComponent } from 'vue';
 interface Cafe {
   id: number;
   dia: string;
-  intensidade: number;
-  docura: number;
+  nota_geral: number;
   criador: string;
 }
 
@@ -28,24 +27,20 @@ export default defineComponent({
     }
   },
   async mounted() {
-    const ctx: ChartItem = document.getElementById('grafico_intensidade') as ChartItem;
-
     await this.listCafes();
+
+    const ctx: ChartItem = document.getElementById('grafico_nota_geral2') as ChartItem;
 
     let cafesChart = this.cafes.slice(0, 15).sort((a, b) => a.id - b.id)
 
-    const grafico_intensidade = new Chart(ctx, {
+    const grafico_nota_geral = new Chart(ctx, {
       type: 'line',
       data: {
         labels: cafesChart.map(cafe => cafe.criador.split(' ')[0]),
         datasets: [
           {
-            label: 'Intensidade',
-            data: cafesChart.map(cafe => (cafe.intensidade))
-          },
-          {
-            label: 'Doçura',
-            data: cafesChart.map(cafe => (cafe.docura))
+            label: 'Nota Geral',
+            data: cafesChart.map(cafe => (cafe.nota_geral))
           }
         ]
       },
@@ -53,8 +48,8 @@ export default defineComponent({
         scales: {
           y: {
             beginAtZero: true,
-            max: 5,
-            min: 1
+            max: 10,
+            min: 0
           }
         }
       }
@@ -62,17 +57,16 @@ export default defineComponent({
   },
   methods: {
     async listCafes() {
-      const response = await api.get('/cafe/findIntensidadeDoce')
+      const response = await api.get('/cafe/findall')
 
       this.cafes = response.data.cafes.map((cafe: Cafe) => {
-        let { id, criador, dia, docura, intensidade } = cafe
+        let { id, criador, dia, nota_geral } = cafe
 
         return {
           id: id,
           dia: dia,
           criador: criador,
-          intensidade: intensidade,
-          docura: docura,
+          nota_geral: nota_geral
         }
       })
 
