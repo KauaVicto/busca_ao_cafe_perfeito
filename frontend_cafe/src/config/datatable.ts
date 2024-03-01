@@ -2,6 +2,7 @@ export const options = {
     responsive: true,
     autoWidth: true,
     order: [[0, 'desc']],
+    select: true,
     language: {
         decimal: "",
         emptyTable: "Nenhum dado disponível na tabela",

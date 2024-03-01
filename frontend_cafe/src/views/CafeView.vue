@@ -1,74 +1,86 @@
 <template>
-  <div class="container">
-    <h1 class="display-4 text-center">Busca ao café perfeito</h1>
-
-    <DataTable :data="cafes" :columns="columns" :options="options" class="table table-striped table-bordered display">
-      <thead>
-        <tr>
-          <th>Dia</th>
-          <th>Marca</th>
-          <th>Criador</th>
-          <th>Café(g)</th>
-          <th>Açúcar(g)</th>
-          <th>Nota Geral</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-    </DataTable>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastrarCafeModal">
-      Cadastrar café
-    </button>
-
-    <GraficoNotaGeral />
-
-    <GraficoIntensidade />
+  <div class="container my-3">
+    <div class="card">
+      <div class="card-title">
+        <h1 class="display-4 text-center">Busca ao café perfeito</h1>
+      </div>
+      <div class="card-body">
 
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="cadastrarCafeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Cadastrar Café</h5>
-            <button type="button" class="btn-close" id="close_modal" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
+        <DataTable :data="cafes" :columns="columns" :options="options" class="table table-striped display">
+          <thead>
+            <tr>
+              <th>Dia</th>
+              <th>Marca</th>
+              <th>Criador</th>
+              <th>Café(g)</th>
+              <th>Açúcar(g)</th>
+              <th>Nota Geral</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+        </DataTable>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastrarCafeModal">
+          Cadastrar café
+        </button>
+
+        <GraficoNotaGeral />
+
+        <GraficoIntensidade />
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="cadastrarCafeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastrar Café</h5>
+                <button type="button" class="btn-close" id="close_modal" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <form @submit.prevent="formCadastrarCafe">
+                <div class="modal-body">
+
+                  <div class="mb-3">
+                    <label for="dia" class="form-label">Dia</label>
+                    <input type="date" class="form-control" v-model="form.dia" id="dia" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="marca" class="form-label">Marca</label>
+                    <input type="text" class="form-control" v-model="form.nome" id="marca" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="quantidade_cafe" class="form-label">Quantidade de café(g)</label>
+                    <input type="number" step="0.1" class="form-control" v-model="form.quantidade_cafe"
+                      id="quantidade_cafe" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="quantidade_acucar" class="form-label">Quantidade de açúcar(g)</label>
+                    <input type="number" step="0.1" class="form-control" v-model="form.quantidade_acucar"
+                      id="quantidade_acucar" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="criador" class="form-label">Criador</label>
+                    <input type="text" class="form-control" v-model="form.criador" id="criador" required>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                  <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </div>
+              </form>
+            </div>
           </div>
-          <form @submit.prevent="formCadastrarCafe">
-            <div class="modal-body">
-
-              <div class="mb-3">
-                <label for="dia" class="form-label">Dia</label>
-                <input type="date" class="form-control" v-model="form.dia" id="dia" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="marca" class="form-label">Marca</label>
-                <input type="text" class="form-control" v-model="form.nome" id="marca" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="quantidade_cafe" class="form-label">Quantidade de café(g)</label>
-                <input type="number" step="0.1" class="form-control" v-model="form.quantidade_cafe" id="quantidade_cafe"
-                  required>
-              </div>
-
-              <div class="mb-3">
-                <label for="quantidade_acucar" class="form-label">Quantidade de açúcar(g)</label>
-                <input type="number" step="0.1" class="form-control" v-model="form.quantidade_acucar"
-                  id="quantidade_acucar" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="criador" class="form-label">Criador</label>
-                <input type="text" class="form-control" v-model="form.criador" id="criador" required>
-              </div>
-
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-              <button type="submit" class="btn btn-primary">Cadastrar</button>
-            </div>
-          </form>
         </div>
       </div>
     </div>
@@ -121,7 +133,11 @@ export default defineComponent({
       columns: [
         {
           data: 'dia', render: function (data: any, type: any, row: any, meta: any) {
-            return moment(data).format('DD/MM/YYYY')
+            if (type === 'sort') {
+              return moment(data).format('YYYY-MM-DD')
+            } else {
+              return moment(data).format('DD/MM/YYYY')
+            }
           }
         },
         { data: 'nome' },
@@ -186,6 +202,8 @@ export default defineComponent({
 </script>
 
 <style>
+@import 'datatables.net-bs5';
+
 form {
   text-align: left;
 }

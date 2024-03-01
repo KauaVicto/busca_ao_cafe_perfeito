@@ -3,16 +3,16 @@
     <h1 class="display-6 text-center">Avalie o Café</h1>
     <form @submit.prevent="submitForm">
 
-      <label for="intensidade" class="form-label">Intensidade <span class="badge bg-primary">{{ labelIntensidade }}</span></label>
-      <input type="range" v-model="form.intensidade" @change="alterLabelIntensidade" class="form-range" min="1" max="5" id="intensidade">
+      <label for="intensidade" class="form-label">Intensidade <span class="badge bg-primary">{{ parseFloat(form.intensidade).toFixed(1) }}</span></label>
+      <input type="range" v-model="form.intensidade" @change="alterLabelIntensidade" class="form-range" min="1" max="5" step="0.1" id="intensidade">
 
-      <label for="doce" class="form-label">Doçura <span class="badge bg-primary">{{ labelDoce }}</span></label>
-      <input type="range" v-model="form.doce" @change="alterLabelDoce" class="form-range" min="1" max="5" id="doce">
+      <label for="doce" class="form-label">Doçura <span class="badge bg-primary">{{ parseFloat(form.doce).toFixed(1) }}</span></label>
+      <input type="range" v-model="form.doce" @change="alterLabelDoce" class="form-range" min="1" max="5" step="0.1" id="doce">
       
-      <label for="sabor" class="form-label">Sabor <span class="badge bg-primary">{{ form.sabor }}</span></label>
+      <label for="sabor" class="form-label">Sabor <span class="badge bg-primary">{{ parseFloat(form.sabor).toFixed(1) }}</span></label>
       <input type="range" v-model="form.sabor" class="form-range" min="0" max="10" step="0.1" id="sabor">
 
-      <label for="nota_geral" class="form-label">Nota Geral <span class="badge bg-primary">{{ form.nota_geral }}</span></label>
+      <label for="nota_geral" class="form-label">Nota Geral <span class="badge bg-primary">{{ parseFloat(form.nota_geral).toFixed(1) }}</span></label>
       <input type="range" v-model="form.nota_geral" class="form-range" min="0" max="10" step="0.1" id="nota_geral">
 
       <div class="mb-3 form-group">
@@ -52,8 +52,8 @@ export default defineComponent({
 
       api.post('/cafe/avaliacao/create', {
         sabor: parseFloat(this.form.sabor),
-        intensidade: parseInt(this.form.intensidade),
-        doce: parseInt(this.form.doce),
+        intensidade: parseFloat(this.form.intensidade),
+        doce: parseFloat(this.form.doce),
         nota_geral: parseFloat(this.form.nota_geral),
         comentario: this.form.comentario,
         cafe_id: parseInt(id)
