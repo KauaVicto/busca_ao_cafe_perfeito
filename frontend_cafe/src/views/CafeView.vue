@@ -19,6 +19,7 @@
               <th>Café(g)</th>
               <th>Açúcar(g)</th>
               <th>Nota Geral</th>
+              <th>Avaliações</th>
               <th>Ação</th>
             </tr>
           </thead>
@@ -111,6 +112,7 @@ export interface Cafe {
   quantidade_acucar: number;
   criador: string;
   nota_geral: string;
+  total_avaliacao: number;
 }
 
 interface returnData {
@@ -145,6 +147,7 @@ export default defineComponent({
         { data: 'quantidade_cafe' },
         { data: 'quantidade_acucar' },
         { data: 'nota_geral' },
+        { data: 'total_avaliacao' },
         {
           data: null, render: function (data: any, type: any, row: any, meta: any) {
             return `<a href="/avaliar/${data.id}" class="btn btn-primary btn-sm">Avaliar</a>`
@@ -179,7 +182,7 @@ export default defineComponent({
       const response = await api.get('/cafe/findall')
 
       this.cafes = response.data.cafes.map((cafe: Cafe) => {
-        let { criador, dia, id, nome, quantidade_acucar, quantidade_cafe, nota_geral } = cafe
+        let { criador, dia, id, nome, quantidade_acucar, quantidade_cafe, nota_geral, total_avaliacao } = cafe
 
         let nota: number = parseFloat(nota_geral)
         if (!nota_geral)
@@ -192,7 +195,8 @@ export default defineComponent({
           quantidade_cafe: quantidade_cafe,
           quantidade_acucar: quantidade_acucar,
           criador: criador,
-          nota_geral: nota.toFixed(1)
+          nota_geral: nota.toFixed(1),
+          total_avaliacao: total_avaliacao
         }
       })
 
