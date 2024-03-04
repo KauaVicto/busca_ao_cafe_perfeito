@@ -40,7 +40,7 @@ export default defineComponent({
         datasets: [
           {
             label: 'Nota Geral',
-            data: cafesChart.map(cafe => (cafe.nota_geral))
+            data: cafesChart.map(cafe => (cafe.nota_geral ? cafe.nota_geral.toFixed(1) : null))
           }
         ]
       },

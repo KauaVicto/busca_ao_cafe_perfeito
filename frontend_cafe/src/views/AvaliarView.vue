@@ -3,10 +3,10 @@
     <h1 class="display-6 text-center">Avalie o Café</h1>
     <form @submit.prevent="submitForm">
 
-      <label for="intensidade" class="form-label">Intensidade <span class="badge bg-primary">{{ parseFloat(form.intensidade).toFixed(1) }}</span></label>
+      <label for="intensidade" class="form-label">Intensidade <span class="badge bg-primary">{{ parseFloat(form.intensidade) == 3 ? 'Ideal' : parseFloat(form.intensidade).toFixed(1) }}</span></label>
       <input type="range" v-model="form.intensidade" @change="alterLabelIntensidade" class="form-range" min="1" max="5" step="0.1" id="intensidade">
 
-      <label for="doce" class="form-label">Doçura <span class="badge bg-primary">{{ parseFloat(form.doce).toFixed(1) }}</span></label>
+      <label for="doce" class="form-label">Doçura <span class="badge bg-primary">{{ parseFloat(form.doce) == 3 ? 'Ideal' : parseFloat(form.doce).toFixed(1) }}</span></label>
       <input type="range" v-model="form.doce" @change="alterLabelDoce" class="form-range" min="1" max="5" step="0.1" id="doce">
       
       <label for="sabor" class="form-label">Sabor <span class="badge bg-primary">{{ parseFloat(form.sabor).toFixed(1) }}</span></label>
