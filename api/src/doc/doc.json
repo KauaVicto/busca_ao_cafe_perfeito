@@ -1,0 +1,14 @@
+{
+    "permissoes": [
+        {
+            "codigo": "C001",
+            "descricao": "Cadastrar Paciente",
+            "endpoint": "/paciente/create"
+        },
+        {
+            "codigo": "C002",
+            "descricao": "Agendar atendimento",
+            "endpoint": "/agendamento/create"
+        }
+    ]
+}

@@ -1,0 +1,277 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API para o sistema de Clínica",
+        "description": "Back-end para gerenciar os dados de uma clínica",
+        "contact": {
+            "email": "kauavicto.dev@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Rota de desenvolvimento"
+        }
+    ],
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "summary": "Login da pessoa",
+                "description": "Essa rota irá realizar o login do usuário",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "login": {
+                                        "type": "string"
+                                    },
+                                    "senha": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "login": "jonh",
+                                    "senha": "mypass"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário antenticado com sucesso",
+                        "content": {
+                            "success": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "usuario": {
+                                            "type": "object",
+                                            "properties": {
+                                                "nome": {
+                                                    "type": "string"
+                                                },
+                                                "url_cliente": {
+                                                    "type": "string"
+                                                },
+                                                "origem": {
+                                                    "type": "string"
+                                                },
+                                                "status": {
+                                                    "type": "number"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Autenticação mau sucedida",
+                        "content": {
+                            "error": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/paciente/create": {
+            "post": {
+                "summary": "Cadastro do Paciente",
+                "description": "Essa rota irá realizar o cadastro do paciente",
+                "tags": [
+                    "Paciente"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "rua": {
+                                        "type": "string"
+                                    },
+                                    "bairro": {
+                                        "type": "string"
+                                    },
+                                    "cidade": {
+                                        "type": "number"
+                                    },
+                                    "uf": {
+                                        "type": "number"
+                                    },
+                                    "cep": {
+                                        "type": "string"
+                                    },
+                                    "numero": {
+                                        "type": "string"
+                                    },
+                                    "cpf": {
+                                        "type": "string"
+                                    },
+                                    "sexo": {
+                                        "type": "string"
+                                    },
+                                    "data_nascimento": {
+                                        "type": "date"
+                                    },
+                                    "sus": {
+                                        "type": "string"
+                                    },
+                                    "estado_civil": {
+                                        "type": "number"
+                                    },
+                                    "raca_cor": {
+                                        "type": "number"
+                                    },
+                                    "naturalidade": {
+                                        "type": "number"
+                                    },
+                                    "filiacao": {
+                                        "type": "string"
+                                    },
+                                    "celular": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "nome": "Alexandro da Silva",
+                                    "rua": "Rua José",
+                                    "bairro": "Santa Inês",
+                                    "cidade": 123,
+                                    "uf": 1234,
+                                    "cep": "46115567",
+                                    "numero": "12",
+                                    "cpf": "12343254365",
+                                    "sexo": "M",
+                                    "data_nascimento": "2003-12-12",
+                                    "sus": "123",
+                                    "estado_civil": 1,
+                                    "raca_cor": 1,
+                                    "naturalidade": 123,
+                                    "filiacao": "Anastácia",
+                                    "celular": "77999880909"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Paciente cadastrado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro ao cadastrar paciente",
+                        "content": {
+                            "error": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agendamento/create": {
+            "post": {
+                "summary": "Inserir agendamento",
+                "description": "Essa rota irá realizar o agendamento do paciente",
+                "tags": [
+                    "Agendamento"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "data_hora": {
+                                        "type": "date"
+                                    },
+                                    "cor": {
+                                        "type": "string"
+                                    },
+                                    "paciente_id": {
+                                        "type": "string"
+                                    },
+                                    "profissional": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "data_hora": "2024-02-03 19:00:00",
+                                    "cor": "ff0000",
+                                    "paciente_id": "dc224e6f-5221-4373-8f33-a7dc73a72f22",
+                                    "profissional_id": "dbaac880-7467-44c2-bef5-813c94373ab1"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Agendamento cadastrado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro ao cadastrar agendamento",
+                        "content": {
+                            "error": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

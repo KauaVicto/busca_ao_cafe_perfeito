@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "debian-openssl-3.0.x"]
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["cafe"]
+}
+
+// Definição da tabela para o café
+model Cafe {
+  id                Int      @id @default(autoincrement())
+  dia               DateTime
+  turno             Int?
+  nome              String
+  quantidade_cafe   Float
+  quantidade_acucar Float
+  criador           String   @db.VarChar(40)
+  // Adicione outros atributos relacionados ao café conforme necessário
+
+  // Relacionamento com a tabela de avaliação
+  avaliacao Avaliacao[]
+
+  @@map("tbcafes")
+  @@schema("cafe")
+}
+
+// Definição da tabela para a avaliação do café
+model Avaliacao {
+  id          Int     @id @default(autoincrement())
+  sabor       Float
+  intensidade Float
+  doce        Float
+  nota_geral  Float
+  comentario  String?
+  cafe_id     Int
+  cafe        Cafe    @relation(fields: [cafe_id], references: [id])
+
+  @@map("tbavaliacoes")
+  @@schema("cafe")
+}
