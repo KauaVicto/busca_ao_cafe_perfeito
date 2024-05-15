@@ -1,5 +1,6 @@
 import { Prisma } from "@core/repository/Prisma";
 import { Request, Response } from "express";
+import { CafeRepository } from "src/repository/cafeRepository";
 
 
 interface avaliacaoBodyRequest {
@@ -33,7 +34,11 @@ export class CreateAvaliacaoController extends Prisma {
             }
         });
 
-        res.status(201).json({})
+        const cafeRepository = new CafeRepository()
+
+        const cafe = await cafeRepository.findCafeById(cafe_id)
+
+        res.status(201).json({cafe})
 
     }
 

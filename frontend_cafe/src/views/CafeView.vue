@@ -30,9 +30,9 @@
           Cadastrar café
         </button>
 
-        <GraficoNotaGeral />
+        <GraficoNotaGeral :key="componenteKey" />
 
-        <GraficoIntensidade />
+        <GraficoIntensidade :key="componenteKey" />
 
 
       </div>
@@ -45,7 +45,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Cadastrar Café</h5>
-            <button type="button" class="btn-close" id="close_modal" data-bs-dismiss="modal"
+            <button type="button" class="btn-close" id="close_modal_cafe" data-bs-dismiss="modal"
               aria-label="Close"></button>
           </div>
           <form @submit.prevent="formCadastrarCafe">
@@ -96,6 +96,54 @@
               <button type="submit" class="btn btn-primary">Cadastrar</button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="cadastrarAvaliacaoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Cadastrar Avaliação</h5>
+            <button type="button" class="btn-close" id="close_modal_avaliacao" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+
+            <form @submit.prevent="formCadastrarAvaliacao">
+
+              <label for="intensidade" class="form-label">Intensidade <span class="badge bg-primary">{{
+                parseFloat(formAvaliacao.intensidade) == 3 ? 'Ideal' :
+                  parseFloat(formAvaliacao.intensidade).toFixed(1) }}</span></label>
+              <input type="range" v-model="formAvaliacao.intensidade" @change="alterLabelIntensidade" class="form-range"
+                min="1" max="5" step="0.1" id="intensidade">
+
+              <label for="doce" class="form-label">Doçura <span class="badge bg-primary">{{
+                parseFloat(formAvaliacao.doce) == 3 ? 'Ideal' : parseFloat(formAvaliacao.doce).toFixed(1)
+                  }}</span></label>
+              <input type="range" v-model="formAvaliacao.doce" @change="alterLabelDoce" class="form-range" min="1"
+                max="5" step="0.1" id="doce">
+
+              <label for="sabor" class="form-label">Sabor <span class="badge bg-primary">{{
+                parseFloat(formAvaliacao.sabor).toFixed(1) }}</span></label>
+              <input type="range" v-model="formAvaliacao.sabor" class="form-range" min="0" max="10" step="0.1"
+                id="sabor">
+
+              <label for="nota_geral" class="form-label">Nota Geral <span class="badge bg-primary">{{
+                parseFloat(formAvaliacao.nota_geral).toFixed(1) }}</span></label>
+              <input type="range" v-model="formAvaliacao.nota_geral" class="form-range" min="0" max="10" step="0.1"
+                id="nota_geral">
+
+              <div class="mb-3 form-group">
+                <label for="comentario" class="form-label">Comentário</label>
+                <textarea v-model="formAvaliacao.comentario" class="form-control" id="comentario"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Enviar</button>
+              <span id="obs" class="m-3">* Por favor, avalie apenas uma vez</span>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -152,6 +200,10 @@ interface returnData {
   columns: any,
   options: object,
   form: any,
+  formAvaliacao: any,
+  labelIntensidade: string,
+  labelDoce: string,
+  componenteKey: number,
   comentarios: Array<string>
 }
 
@@ -207,9 +259,8 @@ export default defineComponent({
         {
           data: null, render: function (data: any, type: any, row: any, meta: any) {
             return `
-              <a href="/avaliar/${data.id}" class="btn"><span class="material-symbols-outlined">done_outline</span></a>
+              <button data-id="${data.id}" class="btn abrir_modal_avaliacao" data-bs-toggle="modal" data-bs-target="#cadastrarAvaliacaoModal" class="btn"><span class="material-symbols-outlined" data-id="${data.id}">done_outline</span></button>
               <button data-id="${data.id}" class="btn abrir_comentario" data-bs-toggle="modal" data-bs-target="#modal_comentarios" ><span class="material-symbols-outlined" data-id="${data.id}">comment</span></button>
-              <!-- <button data-id="${data.id}" class="btn btn-secondary btn-sm abrir_comentario" data-bs-toggle="modal" data-bs-target="#modal_comentarios" >Comentário</button> -->
             `
           },
           orderable: false
@@ -225,13 +276,26 @@ export default defineComponent({
         quantidade_acucar: 0,
         criador: ''
       },
-      comentarios: []
+      formAvaliacao: {
+        sabor: '0',
+        intensidade: '3',
+        doce: '3',
+        nota_geral: '0',
+        comentario: '',
+        cafe_id: ''
+      },
+      labelIntensidade: 'Ideal',
+      labelDoce: 'Ideal',
+      comentarios: [],
+      componenteKey: 0
     }
   },
   async mounted() {
     await this.listCafes();
 
     $('body').on('click', '.abrir_comentario', this.abrir_comentarios)
+
+    $('body').on('click', '.abrir_modal_avaliacao', this.abrir_modal_avaliacao)
 
   },
   methods: {
@@ -247,7 +311,8 @@ export default defineComponent({
       api.post('/cafe/create', data)
         .then(response => {
           this.listCafes()
-          document.getElementById('close_modal')?.click()
+          $('#close_modal_cafe').trigger('click')
+          this.componenteKey++;
 
         })
     },
@@ -291,7 +356,84 @@ export default defineComponent({
         return false
       })
 
-    }
+    },
+    abrir_modal_avaliacao(e: any) {
+      this.formAvaliacao.cafe_id = $(e.target).attr('data-id')
+      console.log(this.formAvaliacao)
+    },
+
+
+    formCadastrarAvaliacao() {
+
+      api.post('/avaliacao/create', {
+        sabor: parseFloat(this.formAvaliacao.sabor),
+        intensidade: parseFloat(this.formAvaliacao.intensidade),
+        doce: parseFloat(this.formAvaliacao.doce),
+        nota_geral: parseFloat(this.formAvaliacao.nota_geral),
+        comentario: this.formAvaliacao.comentario,
+        cafe_id: parseInt(this.formAvaliacao.cafe_id)
+      })
+        .then(response => response.data)
+        .then((response: any) => {
+          $('#close_modal_avaliacao').trigger('click')
+
+          let cafeFind = this.cafes.find((cafe) => {
+            return cafe.id == response.cafe.id
+          })!
+
+          cafeFind.total_avaliacao = response.cafe.total_avaliacao
+          cafeFind.nota_geral = response.cafe.nota_geral.toFixed(1)
+
+          this.formAvaliacao.sabor = '0',
+          this.formAvaliacao.intensidade = '3',
+          this.formAvaliacao.doce = '3',
+          this.formAvaliacao.nota_geral = '0',
+          this.formAvaliacao.comentario = '',
+          this.formAvaliacao.cafe_id = ''
+
+          this.componenteKey++;
+        })
+    },
+    alterLabelIntensidade(event: any) {
+      let intensidade = parseInt(event.target.value)
+      switch (intensidade) {
+        case 1:
+          this.labelIntensidade = 'Muito fraco'
+          break;
+        case 2:
+          this.labelIntensidade = 'Fraco'
+          break;
+        case 3:
+          this.labelIntensidade = 'Ideal'
+          break;
+        case 4:
+          this.labelIntensidade = 'Forte'
+          break;
+        case 5:
+          this.labelIntensidade = 'Muito Forte'
+          break;
+      }
+    },
+    alterLabelDoce(event: any) {
+      let doce = parseInt(event.target.value)
+      switch (doce) {
+        case 1:
+          this.labelDoce = 'Muito pouco doce'
+          break;
+        case 2:
+          this.labelDoce = 'Pouco doce'
+          break;
+        case 3:
+          this.labelDoce = 'Ideal'
+          break;
+        case 4:
+          this.labelDoce = 'Doce'
+          break;
+        case 5:
+          this.labelDoce = 'Muito doce'
+          break;
+      }
+    },
   }
 });
 </script>

@@ -1,8 +1,6 @@
 import { CreateCafeController } from '@application/useCase/cafe/createCafe/createCafeController';
-import { loginController } from '../application/useCase/auth/login';
 import express from 'express';
 import type { NextFunction, Request, Response, Router } from 'express';
-import { CreateAvaliacaoController } from '@application/useCase/cafe/createAvaliacao/createAvaliacaoController';
 import { FindAllCafeController } from '@application/useCase/cafe/findAllCafe/findAllCafeController';
 import { FindAvgIntensidadeDoceController } from '@application/useCase/cafe/findAvgIntensidadeDoce/findAvgIntensidadeDoceController';
 
@@ -43,21 +41,6 @@ cafeRouter.post('/create', async (req: Request, res: Response, next: NextFunctio
 
 
         const controller = new CreateCafeController();
-
-        controller.handle(req, res);
-
-
-
-    } catch (err: any) {
-        next(err)
-    }
-});
-
-cafeRouter.post('/avaliacao/create', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-
-
-        const controller = new CreateAvaliacaoController();
 
         controller.handle(req, res);
 
