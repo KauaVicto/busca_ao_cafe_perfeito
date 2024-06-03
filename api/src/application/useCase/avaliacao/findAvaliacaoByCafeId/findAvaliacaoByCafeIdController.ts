@@ -1,4 +1,4 @@
-import { Prisma } from "@core/repository/Prisma";
+import { prismaInstance } from "@core/repository/Prisma";
 import { Request, Response } from "express";
 
 
@@ -7,17 +7,15 @@ export type FindAvaliacaoByCafeIdParam = {
 }
 
 
-export class FindAvaliacaoByCafeIdController extends Prisma {
+export class FindAvaliacaoByCafeIdController {
 
-    constructor() {
-        super()
-    }
+    constructor() {}
 
     async handle(req: Request<FindAvaliacaoByCafeIdParam>, res: Response) {
 
         const cafe_id = parseInt(req.params.cafe_id);
 
-        const avaliacoes = await this.prisma.avaliacao.findMany({
+        const avaliacoes = await prismaInstance.avaliacao.findMany({
             where: {
                 cafe_id: cafe_id
             }

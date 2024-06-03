@@ -1,4 +1,4 @@
-import { Prisma } from "@core/repository/Prisma";
+import { prismaInstance } from "@core/repository/Prisma";
 import { Request, Response } from "express";
 import moment, { Moment } from "moment";
 
@@ -10,16 +10,14 @@ type resBodyCafe = {
     docura: number
 }
 
-export class FindAvgIntensidadeDoceController extends Prisma {
+export class FindAvgIntensidadeDoceController {
 
-    constructor() {
-        super()
-    }
+    constructor() {}
 
     async handle(req: Request, res: Response) {
 
 
-        const cafes: Array<resBodyCafe> = await this.prisma.$queryRaw`
+        const cafes: Array<resBodyCafe> = await prismaInstance.$queryRaw`
             SELECT 
             ca.*,
             avg(ava.intensidade) AS intensidade,

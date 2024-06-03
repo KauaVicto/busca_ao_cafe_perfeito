@@ -1,4 +1,4 @@
-import { Prisma } from "@core/repository/Prisma";
+import { prismaInstance } from "@core/repository/Prisma";
 import { Request, Response } from "express";
 import { CafeRepository } from "src/repository/cafeRepository";
 
@@ -13,17 +13,15 @@ interface avaliacaoBodyRequest {
 }
 
 
-export class CreateAvaliacaoController extends Prisma {
+export class CreateAvaliacaoController {
 
-    constructor() {
-        super()
-    }
+    constructor() {}
 
     async handle(req: Request<{}, {}, avaliacaoBodyRequest>, res: Response) {
 
         const { comentario, doce, intensidade, nota_geral, sabor, cafe_id } = req.body
 
-        await this.prisma.avaliacao.create({
+        await prismaInstance.avaliacao.create({
             data: {
                 doce,
                 intensidade,

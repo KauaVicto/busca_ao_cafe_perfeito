@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import CafeView from '../views/CafeView.vue'
-import AvaliarView from '@/views/AvaliarView.vue'
+import CafeView from '@/views/CafeView.vue'
+import CadUsuarioView from '@/views/CadUsuarioView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -9,9 +10,14 @@ const routes: Array<RouteRecordRaw> = [
     component: CafeView
   },
   {
-    path: '/avaliar/:id',
-    name: 'avaliar',
-    component: AvaliarView
+    path: '/cadastrar',
+    name: 'cadastrar_usuario',
+    component: CadUsuarioView,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFoundView,
   }
 ]
 

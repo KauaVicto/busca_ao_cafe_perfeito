@@ -10,7 +10,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["cafe"]
+  schemas  = ["cadastro", "cafe"]
 }
 
 // Definição da tabela para o café
@@ -44,4 +44,15 @@ model Avaliacao {
 
   @@map("tbavaliacoes")
   @@schema("cafe")
+}
+
+model Usuario {
+  id       Int    @id @default(autoincrement())
+  nome     String @db.VarChar(40)
+  email    String @db.VarChar(40)
+  telefone String @db.Char(11)
+  senha    String @db.VarChar(60)
+
+  @@map("tbusuarios")
+  @@schema("cadastro")
 }

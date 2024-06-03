@@ -42,11 +42,13 @@ export default defineComponent({
         datasets: [
           {
             label: 'Intensidade',
-            data: cafesChart.map(cafe => (cafe.intensidade))
+            data: cafesChart.map(cafe => (cafe.intensidade)),
+            tension: 0.2
           },
           {
             label: 'Doçura',
-            data: cafesChart.map(cafe => (cafe.docura))
+            data: cafesChart.map(cafe => (cafe.docura)),
+            tension: 0.2
           }
         ]
       },

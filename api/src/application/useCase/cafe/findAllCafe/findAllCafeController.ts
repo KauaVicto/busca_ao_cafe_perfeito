@@ -1,17 +1,15 @@
-import { Prisma } from "@core/repository/Prisma";
+import { prismaInstance } from "@core/repository/Prisma";
 import { Request, Response } from "express";
 
 
-export class FindAllCafeController extends Prisma {
+export class FindAllCafeController {
 
-    constructor() {
-        super()
-    }
+    constructor() {}
 
     async handle(req: Request, res: Response) {
 
 
-        const cafes = await this.prisma.$queryRaw`
+        const cafes = await prismaInstance.$queryRaw`
             SELECT 
             ca.*,
             avg(ava.nota_geral) AS nota_geral,

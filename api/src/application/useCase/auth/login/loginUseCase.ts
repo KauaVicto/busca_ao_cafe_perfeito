@@ -1,24 +1,22 @@
 import { Pessoa } from "@domain/entities/Pessoa";
 import { loginBodyRequest, loginResponse } from "@application/useCase/auth/login/loginDTO";
-import { Prisma } from "@core/repository/Prisma";
 import { UnauthorizedError } from "@helpers/errors";
 import { cryptPassword } from "@helpers/auth/password";
 import { AuthToken } from "@helpers/auth/authToken";
 import { Usuario } from "@domain/entities/Usuario";
+import { prismaInstance } from "@core/repository/Prisma";
 
 
-export class LoginUseCase extends Prisma {
+export class LoginUseCase {
 
     constructor(
-    ) {
-        super()
-    }
+    ) {}
 
     async execute(body: loginBodyRequest): Promise<loginResponse> {
 
         const { login, senha } = body;
 
-        const usuario: Usuario = await this.prisma.usuario.findUnique({
+        const usuario: Usuario = await prismaInstance.usuario.findUnique({
             where: {
                 login: login
             },

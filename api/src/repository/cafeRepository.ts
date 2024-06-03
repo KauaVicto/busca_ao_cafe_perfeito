@@ -1,15 +1,13 @@
-import { Prisma } from "@core/repository/Prisma";
+import { prismaInstance } from "@core/repository/Prisma";
 
-export class CafeRepository extends Prisma {
+export class CafeRepository {
 
-    constructor() {
-        super()
-    }
+    constructor() {}
 
     public async findCafeById(cafe_id: number) {
         
 
-        const cafe: Array<any> = await this.prisma.$queryRaw`
+        const cafe: Array<any> = await prismaInstance.$queryRaw`
             SELECT 
             ca.*,
             avg(ava.nota_geral) AS nota_geral,

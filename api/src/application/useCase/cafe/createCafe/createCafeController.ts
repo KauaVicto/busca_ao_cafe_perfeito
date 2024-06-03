@@ -1,4 +1,4 @@
-import { Prisma } from "@core/repository/Prisma";
+import { prismaInstance } from "@core/repository/Prisma";
 import { Request, Response } from "express";
 
 
@@ -12,17 +12,15 @@ interface cafeBodyRequest {
 }
 
 
-export class CreateCafeController extends Prisma {
+export class CreateCafeController  {
 
-    constructor() {
-        super()
-    }
+    constructor() {}
 
     async handle(req: Request<{}, {}, cafeBodyRequest>, res: Response) {
 
         const { dia, nome, criador, quantidade_acucar, quantidade_cafe, turno } = req.body
 
-        await this.prisma.cafe.create({
+        await prismaInstance.cafe.create({
             data: {
                 dia: new Date(dia),
                 nome: nome,

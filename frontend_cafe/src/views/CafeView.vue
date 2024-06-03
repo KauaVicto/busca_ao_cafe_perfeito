@@ -17,7 +17,7 @@
               <th width="10%">Data</th>
               <th width="10%">Turno</th>
               <th width="15%">Marca</th>
-              <th width="15%">Criador</th>
+              <th width="15%">Cafétão</th>
               <th width="10%">Café(g)</th>
               <th width="10%">Açúcar(g)</th>
               <th width="10%">Nota Geral</th>
@@ -109,10 +109,10 @@
             <button type="button" class="btn-close" id="close_modal_avaliacao" data-bs-dismiss="modal"
               aria-label="Close"></button>
           </div>
+          <form @submit.prevent="formCadastrarAvaliacao">
           <div class="modal-body">
 
 
-            <form @submit.prevent="formCadastrarAvaliacao">
 
               <label for="intensidade" class="form-label">Intensidade <span class="badge bg-primary">{{
                 parseFloat(formAvaliacao.intensidade) == 3 ? 'Ideal' :
@@ -140,10 +140,12 @@
                 <label for="comentario" class="form-label">Comentário</label>
                 <textarea v-model="formAvaliacao.comentario" class="form-control" id="comentario"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Enviar</button>
               <span id="obs" class="m-3">* Por favor, avalie apenas uma vez</span>
-            </form>
-          </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
